@@ -8,8 +8,8 @@ function App() {
   const appName = "IT Academy Coffee Shop";
 
   return (
-    <>      
-      <MenuItems appName={appName}/>          
+    <>
+      <MenuItems appName={appName} />
 
       {/* 분리된 라우터 정보 */}
       <AppRoutes />
