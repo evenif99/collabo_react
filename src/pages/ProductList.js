@@ -53,9 +53,10 @@ function App({ user }) {
                     size="sm"
                     onClick={(event) => {
                         event.stopPropagation();
-                        alert('해당 항목을 수정합니다.');
+                        navigate(`/product/update/${item.id}`);
                     }}
-                >수정
+                >
+                    수정
                 </Button>
                 &nbsp;
                 <Button
@@ -78,7 +79,7 @@ function App({ user }) {
 
                             // alert 함수(modal 통신)와 비동기 통신 사용시, 화면 갱신에 유의하도록 합니다.
                             alert(`'${item.name}' 상품이 삭제 되었습니다.`);
-                    
+
                             setProducts(prev => prev.filter(p => p.id !== item.id));
 
                             // window.location.reload(`/product/list`); → UX 측면에서 비효율적이고 깜빡임 현상이 있어 권장하지 않습니다.
