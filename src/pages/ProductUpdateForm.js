@@ -129,7 +129,7 @@ function App() {
         try {
             // 주의) 라우팅 규칙 때문에 ${id}를 제거하면 안됩니다.
             const url = `${API_BASE_URL}/product/update/${id}`;
-            
+
             // 참조 공유 : 두 변수가 동일한 곳을 참조합니다.
             const parameters = product;
 
