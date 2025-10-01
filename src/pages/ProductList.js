@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import axios from "axios";
 
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import { API_BASE_URL } from "../config/config";
-import axios from "axios";
 
 
-/* 
+/*
 step 01
-단순히 모든 상품 목록을 상품 아이디 역순으로 읽어서 화면에 전체 목록을 보여줍니다.
-하나의 행에 3개의 열씩 보여줍니다.
+상품 목록을 상품 아이디 역순으로 읽어서 화면에 전체 목록을 보여 줍니다.
+하나의 행에 3개의 열씩 보여 줍니다.
 필드 검색과 페이징 기능은 구현하지 않았습니다.
 
 step 02
@@ -18,7 +18,7 @@ step 02
 삭제 버튼에 대한 기능 구현
 */
 function App({ user }) {
-    // 스프링에서 넘겨 받은 상품 목록
+    // 스프링에서 넘겨 받은 상품 목록 state
     const [products, setProducts] = useState([]);
 
     // 스프링 부트에 "상품 목록"을 요청하기
@@ -30,18 +30,17 @@ function App({ user }) {
             .then((response) => {
                 console.log('응답 받은 데이터');
                 console.log(response.data);
-
                 setProducts(response.data);
             })
             .catch((error) => {
                 console.log(error);
             });
 
-    }, []); // useEffect의 두 번째 요소가 빈 배열일 경우, 렌더링을 한 번만 한다.
+    }, []);
 
     const navigate = useNavigate();
 
-    // 이 함수는 관리자 모드일 때 보여 주는 `수정`과 `삭제`를 위한 버튼을 생성해주는 함수입니다.
+    // 이 함수는 관리자 모드일때 보여 주는 `수정`과 `삭제`를 위한 버튼을 생성해주는 함수입니다.
     const makeAdminButtons = (item, user, navigate) => {
         if (user?.role !== 'ADMIN') return null;
 
@@ -73,18 +72,17 @@ function App({ user }) {
                             return;
                         }
 
-                        try { // 상품을 삭제 후 다시 상품 목록 페이지를 보여줍니다.
+                        try { // 상품을 삭제 후 다시 상품 목록 페이지를 보여 줍니다.
                             // 주의) 상품을 삭제하려면 반드시 primary key인 상품의 아이디를 넘겨 주어야 합니다.
                             await axios.delete(`${API_BASE_URL}/product/delete/${item.id}`);
 
                             // alert 함수(modal 통신)와 비동기 통신 사용시, 화면 갱신에 유의하도록 합니다.
                             alert(`'${item.name}' 상품이 삭제 되었습니다.`);
 
+                            // 삭제된 id를 배제하고, 상품 목록 state를 다시 갱신합니다.
                             setProducts(prev => prev.filter(p => p.id !== item.id));
 
-                            // window.location.reload(`/product/list`); → UX 측면에서 비효율적이고 깜빡임 현상이 있어 권장하지 않습니다.
-
-                            navigate(`/product/list`);
+                            navigate('/product/list');
 
                         } catch (error) {
                             console.log(error);
@@ -111,7 +109,7 @@ function App({ user }) {
 
             {/* 필드 검색 영역 */}
 
-            {/* 자료 보여주는 영역 */}
+            {/* 자료 보여 주는 영역 */}
             <Row>
                 {/* products는 상품 배열, item는 상품 1개를 의미 */}
                 {products.map((item) => (
@@ -130,23 +128,22 @@ function App({ user }) {
                                 <table style={{ width: '100%', borderCollapse: 'collapse', border: 'none' }}>
                                     <tbody>
                                         <tr>
-                                            <td style={{ width: '70%', padding: '4px', border: 'none' }}>
+                                            <td style={{ width: '70%', padding: '4px', border: 'none' }} >
                                                 <Card.Title>{item.name}({item.id})</Card.Title>
                                             </td>
-                                            {/* textAlign: 수평 정렬 방식, verticalAlign: 수직 정렬 방식 */}
-                                            {/* rowSpan 속성은 행방향으로 병합 시 사용 ↔ colSpan */}
-                                            <td rowSpan={2} style={{ padding: '4px', border: 'none', textAlign: 'center', verticalAlign: 'middle' }}>
+                                            {/*  textAlign: 수평 정렬 방식, verticalAlign: 수직 정렬 방식 지정 */}
+                                            {/* rowSpan 속성은 행방향으로 병합시 사용 ↔ colSpan  */}
+                                            <td rowSpan={2} style={{ padding: '4px', border: 'none', textAlign: 'center', verticalAlign: 'middle' }} >
                                                 {makeAdminButtons(item, user, navigate)}
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style={{ width: '70%', padding: '4px', border: 'none' }}>
-                                                <Card.Text>가격 : {item.price.toLocaleString()}원</Card.Text>
+                                            <td style={{ width: '70%', padding: '4px', border: 'none' }} >
+                                                <Card.Text>가격 : {item.price.toLocaleString()} 원</Card.Text>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-
                             </Card.Body>
                         </Card>
                     </Col>
@@ -155,7 +152,7 @@ function App({ user }) {
 
             {/* 페이징 처리 영역 */}
 
-        </Container >
+        </Container>
     );
 }
 

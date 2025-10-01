@@ -12,6 +12,7 @@ import ProductInsertForm from './../pages/ProductInsertForm';
 import ProductUpdateForm from './../pages/ProductUpdateForm';
 import ProductDetail from './../pages/ProductDetail';
 import CartList from './../pages/CartList';
+import OrderList from './../pages/OrderList';
 
 // 이 파일은 라우팅 정보를 담고 있는 파일입니다.
 // 이러한 파일을 네트워크에서는 routing table이라고 합니다.
@@ -41,6 +42,8 @@ function App({ user, handleLoginSuccess }) {
             <Route path='/fruit/list' element={<FruitList />} />
             <Route path='/element' element={<ElementOne />} />
             <Route path='/element/list' element={<ElementList />} />
+
+            <Route path='/order/list/' element={<OrderList user={user} />} />
         </Routes>
     );
 }
