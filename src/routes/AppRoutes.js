@@ -23,7 +23,7 @@ import OrderList from './../pages/OrderList';
 function App({ user, handleLoginSuccess }) {
     // user : 사용자 정보를 저장하고 있는 객체
 
-    
+
 
     // handleLoginSuccess : 로그인 성공시 동작할 액션
 
@@ -43,7 +43,7 @@ function App({ user, handleLoginSuccess }) {
 
             {/* 미로그인 시 `장바구니`와 `구매하기` 기능은 선택이 불가능해야 하므로, user 프롭스로 넘겨줍니다. */}
             <Route path='/product/detail/:id' element={<ProductDetail user={user} />} />
-            
+
             <Route path='/cart/list' element={<CartList user={user} />} />
 
             <Route path='/fruit' element={<FruitOne />} />

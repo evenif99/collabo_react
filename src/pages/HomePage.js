@@ -38,7 +38,7 @@ function App() {
                         <p>에스프레소에 뜨거운 물을 추가한 커피.</p>
                     </Carousel.Caption>
                 </Carousel.Item>
-                <Carousel.Item>    
+                <Carousel.Item>
                     <img
                         className="d-block w-100"
                         src={`${API_BASE_URL}/images/whitewine01_bigsize.png`}

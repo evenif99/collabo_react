@@ -1,5 +1,5 @@
-function App(){
-    return(
+function App() {
+    return (
         <>
             메뉴 아이템
         </>
