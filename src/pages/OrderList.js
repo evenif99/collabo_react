@@ -47,7 +47,9 @@ function App({ user }) {
 
     // 관리자를 위한 컴포넌트, 함수
     const makeAdminButton = (bean) => {
-        if (user?.role !== "ADMIN") return null;
+        // 로그인 하지 않았으면 null을 리턴
+        if (user?.role !== "ADMIN" && user?.role !== "USER" ) return null;
+        // if (!["ADMIN", "USER"].includes(user?.role)) return null; → 반복하여 결과값 나타낼 때  배열 + includes문 사용
 
         //`완료` 버튼을 클릭하여 대기 상태인 주문 내역을 결제합니다.
         const changeStatus = async (newStatus) => {
