@@ -53,21 +53,29 @@ function App({ user }) {
 
         //`완료` 버튼을 클릭하여 대기 상태인 주문 내역을 결제합니다.
         const changeStatus = async (newStatus) => {
-            const url = ``;
-            await axios.put(url);
 
-            alert(`송장 번호 ${bean.orderId}의 주문 상태가 ${newStatus}으로 변경이 되었습니다`);
+            try {
+                const url = ``;
+                await axios.put(url);
 
-            // `COMPLETED` 모드로 변경되고 나면, 화면에 보이지 않습니다.
-            setOrders((previous) => 
-                previous.filter(() => orderCancel.orderId != bean.orderId)
-            );
+                alert(`송장 번호 ${bean.orderId}의 주문 상태가 ${newStatus}으로 변경이 되었습니다`);
+
+                // `COMPLETED` 모드로 변경되고 나면, 화면에 보이지 않습니다.
+                setOrders((previous) =>
+                    previous.filter(() => orderCancel.orderId != bean.orderId)
+                );
+            } catch (error) {
+                console.log(error);
+                alert('상태 변경(주문 완료)에 실패하였습니다.');
+            }
         };
+
+
 
         // `취소` 버튼을 클릭하여 대기 상태인 주문 내역을 취소합니다.
         const orderCancel = () => {
-        
-    };
+
+        };
 
         return (
             <div>
@@ -91,67 +99,67 @@ function App({ user }) {
                 >
                     취소
                 </Button>
-            </div>
+            </div >
         );
-    }
+}
     };
 
-    if (loading) {
-        return (
-            <div className="d-flex justify-content-center align-items-center p-5">
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">주문 목록을 불러오는 중입니다.</span>
-                </Spinner>
-            </div>
-        );
-    }
+if (loading) {
+    return (
+        <div className="d-flex justify-content-center align-items-center p-5">
+            <Spinner animation="border" role="status">
+                <span className="visually-hidden">주문 목록을 불러오는 중입니다.</span>
+            </Spinner>
+        </div>
+    );
+}
 
-    if (error) {
-        return (
-            <Container className="my-4">
-                <Alert variant="danger">{error}</Alert>
-            </Container>
-        );
-    }
-
+if (error) {
     return (
         <Container className="my-4">
-            <h1 className="my-4">주문 내역</h1>
-            {orders.length === 0 ? (
-                <Alert variant="secondary">주문 내역이 없습니다.</Alert>
-            ) : (
-                <Row>
-                    {orders.map((bean) => (
-                        <Col key={bean.orderId} md={6} className="mb-4">
-                            <Card className="h-100 shadow-sm">
-                                <Card.Body>
-                                    <div className="d-flex justify-content-between">
-                                        <Card.Title>주문 번호 : {bean.orderId}</Card.Title>
-                                        <small className="text-muted">{bean.orderDate}</small>
-                                    </div>
-
-                                    <Card.Text>
-                                        상태 : <strong>{bean.status}</strong>
-                                    </Card.Text>
-
-                                    <ul style={{ paddingLeft: "20px" }}>
-                                        {bean.orderItems.map((item, index) => (
-                                            <li key={index}>
-                                                {item.productName}({item.quantity}개)
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    {/* 관리자 전용 버튼 생성 */}
-                                    {makeAdminButton(bean)}
-                                </Card.Body>
-
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
-            )}
+            <Alert variant="danger">{error}</Alert>
         </Container>
     );
+}
+
+return (
+    <Container className="my-4">
+        <h1 className="my-4">주문 내역</h1>
+        {orders.length === 0 ? (
+            <Alert variant="secondary">주문 내역이 없습니다.</Alert>
+        ) : (
+            <Row>
+                {orders.map((bean) => (
+                    <Col key={bean.orderId} md={6} className="mb-4">
+                        <Card className="h-100 shadow-sm">
+                            <Card.Body>
+                                <div className="d-flex justify-content-between">
+                                    <Card.Title>주문 번호 : {bean.orderId}</Card.Title>
+                                    <small className="text-muted">{bean.orderDate}</small>
+                                </div>
+
+                                <Card.Text>
+                                    상태 : <strong>{bean.status}</strong>
+                                </Card.Text>
+
+                                <ul style={{ paddingLeft: "20px" }}>
+                                    {bean.orderItems.map((item, index) => (
+                                        <li key={index}>
+                                            {item.productName}({item.quantity}개)
+                                        </li>
+                                    ))}
+                                </ul>
+                                {/* 관리자 전용 버튼 생성 */}
+                                {makeAdminButton(bean)}
+                            </Card.Body>
+
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+        )}
+    </Container>
+);
 }
 
 export default App;
