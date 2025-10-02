@@ -13,11 +13,7 @@ function App() {
 
         axios
             .get(url, {})
-<<<<<<< HEAD
             .then((response) => { // 응답이 성공했을 때
-=======
-            .then((response) => { // 응답이 성공했을 때 
->>>>>>> ea918b2 (collabo_react)
                 console.log('응답 받은 데이터');
                 console.log(response.data);
 
@@ -42,11 +38,7 @@ function App() {
                         <td>{Number(fruit.price).toLocaleString()}원</td>
                     </tr>
                 </tbody>
-<<<<<<< HEAD
             </Table>
-=======
-            </Table >
->>>>>>> ea918b2 (collabo_react)
         </>
     );
 }

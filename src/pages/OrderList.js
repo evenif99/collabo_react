@@ -74,7 +74,7 @@ function App({ user }) {
 
 
         // `취소` 버튼을 클릭하여 대기 상태인 주문 내역을 취소합니다.
-        const orderCancel = async () => {
+        const orderCancel = async (newStatus) => {
             try {
                 const url = `${API_BASE_URL}/order/delete/${bean.orderId}`;
                 await axios.delete(url);
@@ -118,7 +118,7 @@ function App({ user }) {
             </div >
         );
     }
-};
+
 
 if (loading) {
     return (
@@ -176,5 +176,6 @@ return (
         )}
     </Container>
 );
+}
 
 export default App;

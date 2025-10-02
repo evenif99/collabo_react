@@ -8,15 +8,9 @@ function App({ appName, user, handleLogout }) {
 
     // user 프롭스를 사용하여 상단에 보이는 풀다운 메뉴를 적절히 분기 처리합니다.
     const renderMenu = () => {
-<<<<<<< HEAD
         /* 
             user?.role : 자바 스크립트의 optional chaining 문법입니다.
             user가 null이면 undefined로 변환해주고, 오류메세지를 별도로 반환하지 않습니다.
-=======
-        /*
-            user?.role : 자바 스크립트의 optional chaining 문법
-            user가 null이면 undefined로 변환해주고, 오류 메세지를 별도로 반환하지 않습니다.
->>>>>>> ea918b2 (collabo_react)
         */
         switch (user?.role) {
             case 'ADMIN':
@@ -28,10 +22,6 @@ function App({ appName, user, handleLogout }) {
                         <Nav.Link onClick={handleLogout}>로그 아웃</Nav.Link>
                     </>
                 );
-<<<<<<< HEAD
-
-=======
->>>>>>> ea918b2 (collabo_react)
             case 'USER':
                 return (
                     <>
@@ -40,10 +30,6 @@ function App({ appName, user, handleLogout }) {
                         <Nav.Link onClick={handleLogout}>로그 아웃</Nav.Link>
                     </>
                 );
-<<<<<<< HEAD
-
-=======
->>>>>>> ea918b2 (collabo_react)
             default:
                 return (
                     <>
@@ -61,11 +47,7 @@ function App({ appName, user, handleLogout }) {
                 <Navbar.Brand>{user?.name}</Navbar.Brand>
                 <Nav className="me-auto">
                     {/* 하이퍼링크 : Nav.Link는 다른 페이지로 이동할 때 사용됩니다.  */}
-<<<<<<< HEAD
                     <Nav.Link onClick={() => navigate(`/product/list`)}>상품 목록</Nav.Link>
-=======
-                    <Nav.Link onClick={() => navigate(`/product/list`)}>상품 보기</Nav.Link>
->>>>>>> ea918b2 (collabo_react)
 
                     {/* user에 따른 분기된 메뉴를 rendering */}
                     {renderMenu()}

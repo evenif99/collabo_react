@@ -1,12 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import { API_BASE_URL } from "../config/config";
 import { Table } from "react-bootstrap";
-=======
-import { Table } from "react-bootstrap";
-import { API_BASE_URL } from "../config/config";
->>>>>>> ea918b2 (collabo_react)
 
 function App() {
     const [fruitList, setFruitList] = useState([]); // 넘어온 과일 목록
@@ -17,12 +12,8 @@ function App() {
         axios
             .get(url, {})
             .then((response) => {
-<<<<<<< HEAD
                 // console.log(response.data);
 
-=======
-                //console.log(response.data);
->>>>>>> ea918b2 (collabo_react)
                 setFruitList(response.data);
             });
 
@@ -43,19 +34,11 @@ function App() {
                         <tr key={fruit.id}>
                             <td>{fruit.id}</td>
                             <td>{fruit.name}</td>
-<<<<<<< HEAD
                             <td>{Number(fruit.price).toLocaleString()}원</td>
                         </tr>
                     )}
                 </tbody>
             </Table>
-=======
-                            <td>{Number(fruit.price).toLocaleString()} 원</td>
-                        </tr>
-                    )}
-                </tbody>
-            </Table >
->>>>>>> ea918b2 (collabo_react)
         </>
     );
 }

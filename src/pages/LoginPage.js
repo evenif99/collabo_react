@@ -1,10 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-<<<<<<< HEAD
 import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-=======
-import { Container, Row, Col, Card, Alert, Form, Button } from "react-bootstrap";
->>>>>>> ea918b2 (collabo_react)
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config/config";
 
@@ -27,7 +23,6 @@ function App({ setUser }) {
             const url = `${API_BASE_URL}/member/login`;
             const parameters = { email, password };
 
-<<<<<<< HEAD
             // SpringBoot가 넘기는 넘겨주는 정보는 Map<String, Object> 타입 입니다.
             const response = await axios.post(url, parameters); // 동기 통신 방식    
 
@@ -42,22 +37,6 @@ function App({ setUser }) {
                 setUser(member);
 
                 navigate(`/`) // 로그인 성공 후 홈페이지로 이동
-=======
-            // 스프링 부트가 넘겨 주는 정보는 Map<String, Object> 타입입니다.
-            const response = await axios.post(url, parameters);
-
-            // message에는 '로그인 성공 여부'를 알리는 내용, member에는 로그인 한 사람의 객체 정보가 반환 됩니다.
-            const { message, member } = response.data;
-
-            if (message === 'success') { // 자바에서 맵.put("message", "success") 식으로 코딩을 했습니다.
-                console.log('로그인 한 사람의 정보');
-                console.log(member);
-
-                // 로그인 성공시 사용자 정보를 어딘가에 저장해야 합니다.  
-                setUser(member);
-
-                navigate(`/`); // 로그인 성공 후 홈 페이지로 이동
->>>>>>> ea918b2 (collabo_react)
 
             } else { // 로그인 실패
                 setErrors(message);
@@ -88,32 +67,18 @@ function App({ setUser }) {
                                     <Form.Label>이메일</Form.Label>
                                     <Form.Control
                                         type="text"
-<<<<<<< HEAD
                                         placeholder="email을 입력해 주세요."
                                         value={email}
                                         onChange={(event) => setEmail(event.target.value)}
                                         required // 필수적으로 기입되야 하는 사항                                        
-=======
-                                        placeholder="이메일을 입력해 주세요."
-                                        value={email}
-                                        onChange={(event) => setEmail(event.target.value)}
-                                        required
->>>>>>> ea918b2 (collabo_react)
                                     />
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-<<<<<<< HEAD
                                     <Form.Label>비밀번호</Form.Label>
                                     <Form.Control
                                         type="password"
                                         placeholder="비밀번호를 입력해 주세요."
-=======
-                                    <Form.Label>비밀 번호</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        placeholder="비밀 번호를 입력해 주세요."
->>>>>>> ea918b2 (collabo_react)
                                         value={password}
                                         onChange={(event) => setPassword(event.target.value)}
                                         required
@@ -137,11 +102,7 @@ function App({ setUser }) {
                     </Card>
                 </Col>
             </Row>
-<<<<<<< HEAD
         </Container >
-=======
-        </Container>
->>>>>>> ea918b2 (collabo_react)
     );
 }
 

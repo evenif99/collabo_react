@@ -1,12 +1,7 @@
 /* 
 상품 상세 보기
-<<<<<<< HEAD
 전체 화면의 좌우측을 1대2로 분리합니다.
 왼쪽은 상품의 이미지 정보, 오른쪽은 상품의 정보 및 `장바구니`와 `구매하기` 버튼을 배치하겠습니다.
-=======
-전체 화면을 좌우측을 1대2로 분리합니다.
-왼쪽은 상품의 이미지 정보, 오른쪽은 상품의 정보 및 `장바구니`와 `구매하기` 버튼을 만듭니다.
->>>>>>> ea918b2 (collabo_react)
 */
 
 import { Container, Row, Col, Card, Table, Button, Form } from "react-bootstrap";
@@ -17,13 +12,9 @@ import axios from "axios";
 
 function App({ user }) {
     const { id } = useParams(); // id 파라미터 챙기기
-<<<<<<< HEAD
 
     // (Generic) useState의 기본값을 null로 설정하면 프롭스를 객체로 인식하여 값을 0으로 넣을 수 없다.
     const [product, setProduct] = useState(null); // 백엔드에서 넘어온 상품 정보    
-=======
-    const [product, setProduct] = useState(null); // 백엔드에서 넘어온 상품 정보
->>>>>>> ea918b2 (collabo_react)
 
     // 로딩 상태를 의미하는 state로, 값이 true이면 현재 로딩 중입니다.
     const [loading, setLoading] = useState(true);
@@ -45,11 +36,7 @@ function App({ user }) {
             })
             .catch((error) => {
                 console.log(error);
-<<<<<<< HEAD
                 alert('상품 정보를 불러오는 중에 오류가 발생했습니다.');
-=======
-                alert('상품 정보를 불러 오는 중에 오류가 발생하였습니다.');
->>>>>>> ea918b2 (collabo_react)
                 navigate(-1); // 이전 페이지로 이동하기
             });
     }, [id]);
@@ -59,11 +46,7 @@ function App({ user }) {
         return (
             <Container className="my-4 text-center">
                 <h3>
-<<<<<<< HEAD
                     상품 정보를 로딩중 입니다.
-=======
-                    상품 정보를 읽어 오는 중입니다.
->>>>>>> ea918b2 (collabo_react)
                 </h3>
             </Container>
         );
@@ -80,10 +63,6 @@ function App({ user }) {
         );
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ea918b2 (collabo_react)
     // 수량 체인지 관련 이벤트 핸들러 함수 정의
     const QuantityChange = (event) => {
         // parseInt() 메소드는 정수형으로 생긴 문자열을 정수 값으로 변환해 줍니다.
@@ -97,21 +76,13 @@ function App({ user }) {
             alert(`구매 수량은 1개 이상이어야 합니다.`);
             return;
         }
-<<<<<<< HEAD
         // alert(`${product.name} ${quantity} 개를 장바구니에 담기`);
-=======
-        //alert(`${product.name} ${quantity} 개를 장바구니에 담기`);
->>>>>>> ea918b2 (collabo_react)
 
         try {
             const url = `${API_BASE_URL}/cart/insert`;
 
             // Cart에 담을 내용은 `회원 아이디`, `상품 아이디`, `수량`입니다.
-<<<<<<< HEAD
             // BackEnd 영역에서 CartProductDto라는 클래스와 매치됩니다.
-=======
-            // BackEnd 영역에서 CartProductDto 라는 클래스와 매치됩니다.
->>>>>>> ea918b2 (collabo_react)
             const parameters = {
                 memberId: user.id,
                 productId: product.id,
@@ -133,47 +104,6 @@ function App({ user }) {
         }
     }
 
-<<<<<<< HEAD
-=======
-    // 사용자가 `주문하기` 버튼을 클릭하였습니다.
-    const buyNow = async () => {
-        if (quantity < 1) {
-            alert('수량을 1개 이상 선택해 주셔야 합니다.');
-            return;
-        }
-
-        try {
-            const url = `${API_BASE_URL}/order`;
-
-            // 스프링 부트의 OrderDto, OrderItemDto 클래스와 연관이 있습니다.
-            // 주의) parameters 작성시 key의 이름은 OrderDto의 변수 이름과 동일하게 작성해야 합니다.
-            // 상세 상세 보기 페이지에서는 무조건 1개의 상품만 주문을 할 수 있습니다.
-            const parameters = {
-                memberId: user.id,
-                status: 'PENDING',
-                orderItems: [{
-                    productId: product.id,
-                    quantity: quantity
-                }]
-            };
-
-            console.log('주문할 데이터 정보');
-            console.log(parameters);
-
-            const response = await axios.post(url, parameters);
-            console.log(response.data);
-            alert(`${product.name} ${quantity}개를 주문하였습니다.`);
-
-            navigate('/product/list'); // 목록 페이지로 이동
-
-        } catch (error) {
-            console.log('주문 기능 실패');
-            console.log(error);
-        };
-    };
-
-
->>>>>>> ea918b2 (collabo_react)
     return (
         <Container className="my-4">
             <Card>
@@ -187,7 +117,6 @@ function App({ user }) {
                             style={{ width: '100%', height: '400px' }}
                         />
                     </Col>
-<<<<<<< HEAD
                     {/* 우측 상품 이미지 및 구매 관련 버튼 */}
                     <Col md={8}>
                         <Card.Body>
@@ -199,19 +128,6 @@ function App({ user }) {
                                     <tr>
                                         <td className="text-center">가격</td>
                                         <td>{product.price}원</td>
-=======
-                    {/* 우측 상품 정보 및 구매 관련 버튼 */}
-                    <Col md={8}>
-                        <Card.Body>
-                            <Card.Title className="fd-3">
-                                <h3>{product.name}</h3>
-                            </Card.Title>
-                            <Table striped>
-                                <tbody>
-                                    <tr>
-                                        <td className="text-center">가격</td>
-                                        <td>{product.price}</td>
->>>>>>> ea918b2 (collabo_react)
                                     </tr>
                                     <tr>
                                         <td className="text-center">카테고리</td>
@@ -219,11 +135,7 @@ function App({ user }) {
                                     </tr>
                                     <tr>
                                         <td className="text-center">재고</td>
-<<<<<<< HEAD
                                         <td>{product.stock}개</td>
-=======
-                                        <td>{product.stock}</td>
->>>>>>> ea918b2 (collabo_react)
                                     </tr>
                                     <tr>
                                         <td className="text-center">설명</td>
@@ -237,11 +149,7 @@ function App({ user }) {
                             </Table>
 
                             {/* 구매 수량 입력란 */}
-<<<<<<< HEAD
                             {/* as={Row}는 렌더링 시 기본 값인 <div> 말고 Row로 렌더링 하도록 해줍니다. */}
-=======
-                            {/* as={Row}는 렌더링시 기본 값인 <div> 말고 Row로 렌더링하도록 해줍니다. */}
->>>>>>> ea918b2 (collabo_react)
                             <Form.Group as={Row} className="mb-3 align-items-center">
                                 <Col xs={3} className="text-center">
                                     <strong>구매 수량</strong>
@@ -251,11 +159,7 @@ function App({ user }) {
                                     <Form.Control
                                         type="number"
                                         min="1"
-<<<<<<< HEAD
                                         disabled={!user} // !user는 로그인을 안한 상태를 의미
-=======
-                                        disabled={!user}
->>>>>>> ea918b2 (collabo_react)
                                         value={quantity}
                                         onChange={QuantityChange}
                                     />
@@ -263,49 +167,24 @@ function App({ user }) {
                             </Form.Group>
 
                             {/* 버튼(이전 목록, 장바구니, 구매하기) */}
-<<<<<<< HEAD
                             <div className="d-flex justify-content-center mt-3" >
                                 <Button variant="danger" className="me-3 px-4" href="/product/list" style={{ fontWeight: 'bold' }}>
-=======
-                            <div className="d-flex justify-content-center mt-3">
-                                <Button variant="primary" className="me-3 px-4" href="/product/list">
->>>>>>> ea918b2 (collabo_react)
                                     이전 목록
                                 </Button>
                                 <Button variant="success" className="me-3 px-4"
                                     onClick={() => {
                                         if (!user) {
-<<<<<<< HEAD
                                             alert('로그인이 필요한 서비스 입니다.')
-=======
-                                            alert('로그인이 필요한 서비스입니다.');
->>>>>>> ea918b2 (collabo_react)
                                             return navigate('/member/login');
                                         } else {
                                             addToCart();
                                         }
                                     }}
-<<<<<<< HEAD
                                     style={{ fontWeight: 'bold' }}
                                 >
                                     장바구니
                                 </Button>
                                 <Button variant="primary" className="me-3 px-4" style={{ fontWeight: 'bold' }}>
-=======
-                                >
-                                    장바구니
-                                </Button>
-                                <Button variant="danger" className="me-3 px-4"
-                                    onClick={() => {
-                                        if (!user) {
-                                            alert('로그인이 필요한 서비스입니다.');
-                                            return navigate('/member/login');
-                                        } else {
-                                            buyNow();
-                                        }
-                                    }}
-                                >
->>>>>>> ea918b2 (collabo_react)
                                     구매하기
                                 </Button>
                             </div>

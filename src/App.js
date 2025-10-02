@@ -6,12 +6,6 @@ import MenuItems from './ui/MenuItems';
 import AppRoutes from './routes/AppRoutes';
 import { useState, useEffect } from 'react';
 
-// 분리된 리액트 컴포넌트 import
-import MenuItems from './ui/MenuItems';
-import AppRoutes from './routes/AppRoutes';
-
-import { useEffect, useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 
 function App() {
@@ -28,10 +22,7 @@ function App() {
 
   }, []); // 두번째 매개 변수가 empty array이므로 1번만 rendering됩니다.
 
-  const handleLoginSuccess = (userData) => {
-    // LoginPage.js에서 반환 받은 member 정보입니다.
 
-  }, []); // 2번째 매개 변수가 empty array이므로 1번만 rendering됩니다.
 
   const handleLoginSuccess = (userData) => {
     // userData : LoginPage.js에서 반환 받은 member 정보입니다.
@@ -48,7 +39,7 @@ function App() {
 
     event.preventDefault(); // 이벤트 전파 방지
 
-    event.preventDefault();
+
 
 
     setUser(null);
