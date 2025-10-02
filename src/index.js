@@ -10,11 +10,11 @@ import { BrowserRouter } from 'react-router-dom'; // 신규 생성됨
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-<<<<<<< HEAD
+
 // StrictMode 코드 삭제 : 개발 도중에 발생하는 문제를 추가적으로 감지하기 위하여 rendering을 2번 수행합니다.
-=======
+
 // StrictMode 코드 삭제 : 개발 도중에 발생하는 문제를 추가적으로 감지 하기 위하여 rendering을 2번 수행합니다.
->>>>>>> ea918b2 (collabo_react)
+
 
 root.render(
   <BrowserRouter>

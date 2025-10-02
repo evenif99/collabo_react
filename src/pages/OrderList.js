@@ -95,17 +95,18 @@ function App({ user }) {
         return (
             <div>
                 {/* `완료` 버튼은 관리자만 볼 수 있습니다. */}
-                {user?.role === 'ADMIN' && ()
-                <Button
-                    variant="success"
-                    size="sm"
-                    className="me-2"
-                    onClick={() => changeStatus('COMPLETED')}
-                        
-                    
-                >
-                    완료
-                </Button>
+                {user?.role === 'ADMIN' && (
+                    <Button
+                        variant="success"
+                        size="sm"
+                        className="me-2"
+                        onClick={() => changeStatus('COMPLETED')}
+
+
+                    >
+                        완료
+                    </Button>
+                )}
                 <Button
                     variant="danger"
                     size="sm"
@@ -116,8 +117,8 @@ function App({ user }) {
                 </Button>
             </div >
         );
-}
-    };
+    }
+};
 
 if (loading) {
     return (
@@ -175,6 +176,5 @@ return (
         )}
     </Container>
 );
-}
 
 export default App;
