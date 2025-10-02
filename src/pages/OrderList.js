@@ -55,12 +55,13 @@ function App({ user }) {
         const changeStatus = async (newStatus) => {
 
             try {
-                const url = ``;
+                const url = `${API_BASE_URL}/order/update/status/${bean.orderId}?status=${newStatus}`;
                 await axios.put(url);
 
                 alert(`송장 번호 ${bean.orderId}의 주문 상태가 ${newStatus}으로 변경이 되었습니다`);
 
                 // `COMPLETED` 모드로 변경되고 나면, 화면에 보이지 않습니다.
+                // bean.orderId와 동일하지 않은 항목들만 다시 rendering 합니다.
                 setOrders((previous) =>
                     previous.filter(() => orderCancel.orderId != bean.orderId)
                 );
@@ -73,8 +74,22 @@ function App({ user }) {
 
 
         // `취소` 버튼을 클릭하여 대기 상태인 주문 내역을 취소합니다.
-        const orderCancel = () => {
+        const orderCancel = async () => {
+            try {
+                const url = `${API_BASE_URL}/order/delete/${bean.orderId}`;
+                await axios.delete(url);
 
+                alert(`송장 번호 ${bean.orderId}의 주문 상태가 ${newStatus}으로 변경이 되었습니다`);
+
+                // `COMPLETED` 모드로 변경되고 나면, 화면에 보이지 않습니다.
+                // bean.orderId와 동일하지 않은 항목들만 다시 rendering 합니다.
+                setOrders((previous) =>
+                    previous.filter(() => orderCancel.orderId != bean.orderId)
+                );
+            } catch (error) {
+                console.log(error);
+                alert('상태 변경(주문 완료)에 실패하였습니다.');
+            }
         };
 
         return (
