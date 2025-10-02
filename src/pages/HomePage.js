@@ -38,7 +38,11 @@ function App() {
                         <p>에스프레소에 뜨거운 물을 추가한 커피.</p>
                     </Carousel.Caption>
                 </Carousel.Item>
+<<<<<<< HEAD
                 <Carousel.Item>    
+=======
+                <Carousel.Item>
+>>>>>>> ea918b2 (collabo_react)
                     <img
                         className="d-block w-100"
                         src={`${API_BASE_URL}/images/whitewine01_bigsize.png`}
