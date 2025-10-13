@@ -182,8 +182,8 @@ function App({ user }) {
                         >
                             <option value='all'>전체 기간</option>
                             <option value='1d'>하루</option>
-                            <option value='1w'>일주일</option>
-                            <option value='1m'> 한달</option>
+                            <option value='1w'>1주</option>
+                            <option value='1m'>1달</option>
                             <option value='6m'>6개월</option>
                         </Form.Select>
                     </Col>
@@ -216,16 +216,19 @@ function App({ user }) {
                     </Col>
                     {/* 검색어 입력란 */}
                     <Col md={4}>
-                        <Form.Control
-                            name="searchKeyword"
-                            type="text"
-                            placeholder="검색어를 입력해 주세요"
-                            value={paging.searchKeyword}
-                            onChange={(e) => {
-                                e.preventDefault();
-                                setPaging((previous) => ({ ...previous, searchMode: e.target.value }));
-                            }}
-                        />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Form.Control
+                                name="searchKeyword"
+                                type="text"
+                                placeholder="검색어를 입력해 주세요"
+                                value={paging.searchKeyword}
+                                onChange={(e) => {
+                                    e.preventDefault();
+                                    setPaging((previous) => ({ ...previous, searchKeyword: e.target.value }));
+                                }}
+                                style={{ flexGrow: 1 }}
+                            />                        
+                        </div>
                     </Col>
                     {/* 페이징 상태 보여주기 */}
                     <Col md={2}>
@@ -234,7 +237,7 @@ function App({ user }) {
                             type="text"
                             value={paging.pagingStatus}
                             disabled
-                            style={{                                
+                            style={{
                                 backgroundColor: '#f0f0f0',
                                 textAlign: 'center', // 텍스트 가운데 정렬
                                 width: '100%', // 필요한 너비 설정
