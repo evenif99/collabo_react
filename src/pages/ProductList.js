@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Pagination, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import { API_BASE_URL } from "../config/config";
@@ -21,22 +21,84 @@ function App({ user }) {
     // 스프링에서 넘겨 받은 상품 목록 state
     const [products, setProducts] = useState([]);
 
+    // 페이징과 관련된 state를 정의합니다.
+    const [paging, setPaging] = useState({
+        totalElements: 0, // 전체 데이터 개수
+        pageSize: 6, // 1개의 페이지에 보여 지는 데이터 개수
+        totalPages: 0, // (전체 페이지 개수) = totalElements / pageSize(결과값은 올림해야 함)
+        pageNumber: 0, // 현재 페이지 번호
+        pageCount: 10, // 페이지 하단 버튼의 개수
+        beginPage: 0, // 페이징 시작 번호
+        endPage: 0, // 페이징 끝 번호
+        pagingStatus: '', // "pageNumber / totalPages 페이지"(표시 방법)
+
+        // 자바의 SearchDto(필드 검색용) 클래스 연관 필드(field)
+        searchDateType: 'all', // 기간 검색 콤보 박스
+        category: '', // 검색하고자 하는 특정 카테고리 콤보 박스        
+        searchMode: '', // 상품 검색 모드 콤보 박스_상품 이름(name) 또는 상품 설명(description)
+        searchKeyword: '' // 검색 키워드 입력 상자
+    });
+
     // 스프링 부트에 "상품 목록"을 요청하기
-    useEffect(() => {
+    useEffect(() => { // 상품 목록에서 페이지네이션 렌더링 목적
         const url = `${API_BASE_URL}/product/list`;
+        const parameters = {
+            params: {
+                pageNumber: paging.pageNumber,
+                pageSize: paging.pageSize,
+
+                // SearchDto 클래스 연관 필드 또한 파라미터로 넘겨줘야 함
+                searchDateType: paging.searchDateType,
+                category: paging.category,
+                searchMode: paging.searchMode,
+                searchKeyword: paging.searchKeyword
+            },
+            withCredentials: true
+        };
 
         axios
-            .get(url, {})
+            .get(url, parameters)
             .then((response) => {
                 console.log('응답 받은 데이터');
-                console.log(response.data);
-                setProducts(response.data);
+                console.log(response.data.content);
+                setProducts(response.data.content || []);
+
+                // 사용자가 Pagination 항목을 클릭하였으므로, 페이징 정보를 업데이트 해줘야 합니다.
+                // 주의) 0based이므로 코드 작성에 유의
+                setPaging((previous) => { // spring 환경의 코딩을 고려하여 변수 제작
+                    const totalElements = response.data.totalElements;
+                    const totalPages = response.data.totalPages || 0;
+                    const pageNumber = response.data.pageable.pageNumber; // pageable은 spring 환경의 자체적으로 존재하는 구문
+
+                    // 만약 pageSize의 값이 고정적 이라면 할당 받지 않아도 됩니다. 
+                    // 단, 가변적인 경우 반드시 할당 받아야 합니다.
+                    const pageSize = response.data.pageable.pageSize;
+
+                    //const pageCount = 10; // 고정 값으로 진행
+
+                    const beginPage = Math.floor(pageNumber / previous.pageCount) * previous.pageCount;
+                    const endPage = Math.min(beginPage + previous.pageCount - 1, totalPages - 1);
+
+                    // 주의) 0base 이므로 +1을 해줘야 합니다.
+                    const pagingStatus = `${pageNumber + 1} / ${totalPages} 페이지`;
+
+                    return {
+                        ...previous,
+                        totalElements: totalElements,
+                        totalPages: totalPages,
+                        pageNumber: pageNumber,
+                        pageSize: pageSize,
+                        beginPage: beginPage,
+                        endPage: endPage,
+                        pagingStatus: pagingStatus,
+                    };
+                });
             })
             .catch((error) => {
                 console.log(error);
             });
 
-    }, []);
+    }, [paging.pageNumber, paging.searchDateType, paging.category, paging.searchMode, paging.searchKeyword]);
 
     const navigate = useNavigate();
 
@@ -108,6 +170,80 @@ function App({ user }) {
             </Link>
 
             {/* 필드 검색 영역 */}
+            <Form className="p-3">
+                <Row className="mb-3">
+                    {/* 검색 기간 선택 */}
+                    <Col md={2}>
+                        <Form.Select
+                            name="searchDateType"
+                            value={paging.searchDateType}
+                            // e는 event 객체를 의미함
+                            onChange={(e) => setPaging((previous) => ({ ...previous, searchDateType: e.target.value }))}
+                        >
+                            <option value='all'>전체 기간</option>
+                            <option value='1d'>하루</option>
+                            <option value='1w'>일주일</option>
+                            <option value='1m'> 한달</option>
+                            <option value='6m'>6개월</option>
+                        </Form.Select>
+                    </Col>
+                    {/* 카테고리 선택 */}
+                    <Col md={2}>
+                        <Form.Select
+                            name="category"
+                            value={paging.category}
+                            // e는 event 객체를 의미함
+                            onChange={(e) => setPaging((previous) => ({ ...previous, category: e.target.value }))}
+                        >
+                            <option value='ALL'>카테고리 선택</option>
+                            <option value='BREAD'>빵</option>
+                            <option value='BEVERAGE'>음료수</option>
+                            <option value='CAKE'>케이크</option>
+                        </Form.Select>
+                    </Col>
+                    {/* 상품 검색 모드 선택 */}
+                    <Col md={2}>
+                        <Form.Select
+                            name="searchMode"
+                            value={paging.searchMode}
+                            // e는 event 객체를 의미함
+                            onChange={(e) => setPaging((previous) => ({ ...previous, searchMode: e.target.value }))}
+                        >
+                            <option value='ALL'>전체 검색</option>
+                            <option value='name'>상품명</option>
+                            <option value='description'>상품 설명</option>
+                        </Form.Select>
+                    </Col>
+                    {/* 검색어 입력란 */}
+                    <Col md={4}>
+                        <Form.Control
+                            name="searchKeyword"
+                            type="text"
+                            placeholder="검색어를 입력해 주세요"
+                            value={paging.searchKeyword}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                setPaging((previous) => ({ ...previous, searchMode: e.target.value }));
+                            }}
+                        />
+                    </Col>
+                    {/* 페이징 상태 보여주기 */}
+                    <Col md={2}>
+                        <Form.Control
+                            as="input" // input 양식으로 제작할 것을 보여줌
+                            type="text"
+                            value={paging.pagingStatus}
+                            disabled
+                            style={{                                
+                                backgroundColor: '#f0f0f0',
+                                textAlign: 'center', // 텍스트 가운데 정렬
+                                width: '100%', // 필요한 너비 설정
+                                margin: '0 auto', // 가운데 정렬을 위한 자동 여백
+                            }}
+                        />
+                    </Col>
+                </Row>
+            </Form>
 
             {/* 자료 보여 주는 영역 */}
             <Row>
@@ -115,7 +251,7 @@ function App({ user }) {
                 {products.map((item) => (
                     <Col key={item.id} md={4} className="mb-4">
 
-                        <Card className="h-100"                        
+                        <Card className="h-100"
 
                             onClick={() => navigate(`/product/detail/${item.id}`)}
                             style={{ cursor: 'pointer' }}>
@@ -153,6 +289,76 @@ function App({ user }) {
             </Row>
 
             {/* 페이징 처리 영역 */}
+            <Pagination className="justify-content-center mt-4">
+                {/* 앞쪽 영역 */}
+                <Pagination.First
+                    onClick={() => {
+                        console.log('First 버튼 클릭(0 페이지로 이동)');
+                        setPaging((previous) => ({ ...previous, pageNumber: 0 }));
+                    }}
+                    disabled={paging.pageNumber < paging.pageCount}
+                    as="button"
+                >
+                    맨처음
+                </Pagination.First>
+
+                <Pagination.Prev
+                    onClick={() => {
+                        const gotoPage = paging.beginPage - 1;
+                        console.log(`Prev 버튼 클릭(${gotoPage} 페이지로 이동)`);
+                        setPaging((previous) => ({ ...previous, pageNumber: gotoPage }));
+                    }}
+                    disabled={paging.pageNumber < paging.pageCount}
+                    as="button"
+                >
+                    이전
+                </Pagination.Prev>
+
+                {/* 숫자 링크가 들어 가는 영역 */}
+                {[...Array(paging.endPage - paging.beginPage + 1)].map((_, idx) => {
+                    // pageIndex는 숫자 링크 번호입니다.
+                    const pageIndex = paging.beginPage + idx + 1;
+
+                    return (
+                        <Pagination.Item
+                            key={pageIndex}
+                            active={paging.pageNumber === (pageIndex - 1)}
+                            onClick={() => {
+                                console.log(`${pageIndex} 페이지로 이동하기`);
+                                setPaging((previous) => ({ ...previous, pageNumber: (pageIndex - 1) }));
+                            }}
+                        >
+                            {pageIndex}
+                        </Pagination.Item>
+                    );
+                })}
+
+                {/* 뒤쪽 영역 */}
+                <Pagination.Next
+                    onClick={() => {
+                        const gotoPage = paging.endPage + 1;
+                        console.log(`Next 버튼 클릭(${gotoPage} 페이지로 이동)`);
+                        setPaging((previous) => ({ ...previous, pageNumber: gotoPage }));
+                    }}
+                    disabled={paging.pageNumber >= Math.floor(paging.totalPages / paging.pageCount) * paging.pageCount}
+                    as="button"
+                >
+                    다음
+                </Pagination.Next>
+
+                <Pagination.Last
+                    onClick={() => {
+                        const gotoPage = paging.totalPages - 1;
+                        console.log(`Last 버튼 클릭(${gotoPage} 페이지로 이동)`);
+                        setPaging((previous) => ({ ...previous, pageNumber: gotoPage }));
+                    }}
+                    disabled={paging.pageNumber >= Math.floor(paging.totalPages / paging.pageCount) * paging.pageCount}
+                    as="button"
+                >
+                    맨끝
+                </Pagination.Last>
+
+            </Pagination>
 
         </Container>
     );
