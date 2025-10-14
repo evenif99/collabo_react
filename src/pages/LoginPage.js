@@ -21,10 +21,27 @@ function App({ setUser }) {
 
         try {
             const url = `${API_BASE_URL}/member/login`;
-            const parameters = { email, password };
+            // const parameters = { email, password }; (10/14 주석처리)
+
+            // // SpringBoot가 넘기는 넘겨주는 정보는 Map<String, Object> 타입 입니다.
+            // const response = await axios.post(url, parameters); // 동기 통신 방식
+
+            // axios는 기본값으로 json 형식을 전송하지만, Security가 이를 처리하지 못합니다.
+            // 대신, form-urlencoded 타입으로 전송해주어야 합니다.
+            // URLSearchParams는 자바 스크립트에서 QueryString를 다루기 위한 내장 객체 입니다.
+            // QueryString : url뒤의 ? 뒤에 배치되어 서버에 추가 정보를 전송하는 역할을 하는 문자열을 의미합니다.. 
+            const parameters = new URLSearchParams();
+            parameters.append('email', email);
+            parameters.append('password', password);
 
             // SpringBoot가 넘기는 넘겨주는 정보는 Map<String, Object> 타입 입니다.
-            const response = await axios.post(url, parameters); // 동기 통신 방식    
+            const response = await axios.post(url, parameters, {
+                headers: { // 데이터 요청 시 필수로 기입해야 하는 정보
+                    'Content-Type': 'application/x-www-form-urlencoded' // key(Content-Type): value
+                },
+                // withCredentials: 웹에서 다른 도메인(서버)으로 요청을 보낼 때, 쿠키 등 인증 정보를 같이 포함시킬지 결정하는 옵션입니다.
+                withCredentials: true // 세션 기반 인증 시 필수 (Security 사용 시 필수적으로 사용됨)
+            }); // 동기 통신 방식
 
             // message에는 '로그인 성공 여부'를 알리는 내용, member에는 로그인 한 사람의 객체 정보가 반환됩니다.
             const { message, member } = response.data;
