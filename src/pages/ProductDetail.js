@@ -26,18 +26,30 @@ function App({ user }) {
 
     // 파라미터 id가 갱신이 되면 화면을 다시 rendering 시킵니다.
     useEffect(() => {
+        if (!user) {
+            alert('로그인이 필요한 서비스입니다.');
+            navigate('/member/login');
+            return;
+        }
+
         const url = `${API_BASE_URL}/product/detail/${id}`;
 
         axios
-            .get(url)
+            .get(url, { withCredentials: true }) // 쿠키, 세션 포함 옵션
             .then((response) => {
                 setProduct(response.data);
                 setLoading(false); // 상품 정보를 읽어 왔습니다.
             })
             .catch((error) => {
                 console.log(error);
-                alert('상품 정보를 불러오는 중에 오류가 발생했습니다.');
-                navigate(-1); // 이전 페이지로 이동하기
+                if (error.response && error.response.status === 401) { // 401(UnAuthrized)
+                    alert('로그인이 필요한 서비스입니다.');
+                    navigate('/member/login'); // 로그인 페이지로 리다이렉트
+                } else {
+                    alert('상품 정보를 불러오는 중에 오류가 발생했습니다.');
+                    navigate(-1); // 이전 페이지로 이동하기
+                }
+
             });
     }, [id]);
 
@@ -89,7 +101,7 @@ function App({ user }) {
                 quantity: quantity
             };
 
-            const response = await axios.post(url, parameters);
+            const response = await axios.post(url, parameters, { withCredentials: true });
 
             alert(response.data);
             navigate('/product/list'); // 상품 목록 페이지로 이동
@@ -103,6 +115,44 @@ function App({ user }) {
             }
         }
     }
+
+    // 사용자가 `주문하기` 버튼을 클릭하였습니다.
+    const buyNow = async () => {
+        if (quantity < 1) {
+            alert('수량을 1개 이상 선택해 주셔야 합니다.');
+            return;
+        }
+
+        try {
+            const url = `${API_BASE_URL}/order`;
+
+            // 스프링 부트의 OrderDto, OrderItemDto 클래스와 연관이 있습니다.
+            // 주의) parameters 작성시 key의 이름은 OrderDto의 변수 이름과 동일하게 작성해야 합니다.
+            // 상세 상세 보기 페이지에서는 무조건 1개의 상품만 주문을 할 수 있습니다.
+            const parameters = {
+                memberId: user.id,
+                status: 'PENDING',
+                orderItems: [{
+                    productId: product.id,
+                    quantity: quantity
+                }]
+            };
+
+            console.log('주문할 데이터 정보');
+            console.log(parameters);
+
+            const response = await axios.post(url, parameters, { withCredentials: true });
+            console.log(response.data);
+            alert(`${product.name} ${quantity}개를 주문하였습니다.`);
+
+            navigate('/product/list'); // 목록 페이지로 이동
+
+        } catch (error) {
+            console.log('주문 기능 실패');
+            console.log(error);
+        };
+    };
+
 
     return (
         <Container className="my-4">
@@ -184,7 +234,16 @@ function App({ user }) {
                                 >
                                     장바구니
                                 </Button>
-                                <Button variant="primary" className="me-3 px-4" style={{ fontWeight: 'bold' }}>
+                                <Button variant="primary" className="me-3 px-4" style={{ fontWeight: 'bold' }}
+                                    onClick={() => {
+                                        if (!user) {
+                                            alert('로그인이 필요한 서비스입니다.');
+                                            return navigate('/member/login');
+                                        } else {
+                                            buyNow();
+                                        }
+                                    }}
+                                >
                                     구매하기
                                 </Button>
                             </div>
