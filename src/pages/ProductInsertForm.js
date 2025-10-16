@@ -104,7 +104,10 @@ function App({ user }) {
             // Content-Type(Mime Type) : 문서의 종류가 어떠한 종류인지 알려주는 항목
             // 예시 : 'text/html', 'image/jpeg', 'application/json' 등등
             // 이 문서는 json 형식의 파일입니다.
-            const config = { headers: { 'Content-Type': 'application/json' } };
+            const config = {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            };
 
             const response = await axios.post(url, parameters, config);
 
@@ -127,7 +130,7 @@ function App({ user }) {
     };
 
     return (
-        <Container>
+        <Container style={{ marginTop: '30px' }}>
             <h1>{comment}</h1>
             <Form onSubmit={SubmitAction}>
                 <Form.Group className="mb-3">
